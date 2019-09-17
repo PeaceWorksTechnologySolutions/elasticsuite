@@ -86,6 +86,9 @@ class AttributeData extends AbstractAttributeData implements DatasourceInterface
         foreach ($this->attributeIdsByTable as $backendTable => $attributeIds) {
             $attributesData = $this->loadAttributesRawData($storeId, $productIds, $backendTable, $attributeIds);
             foreach ($attributesData as $row) {
+                if (!$this->shouldIndexEntity($row['entity_id'])) {
+                    continue;
+                }
                 $productId    = (int) $row['entity_id'];
                 $attribute    = $this->attributesById[$row['attribute_id']];
                 $indexValues  = $this->attributeHelper->prepareIndexValue($attribute, $storeId, $row['value']);
@@ -236,5 +239,10 @@ class AttributeData extends AbstractAttributeData implements DatasourceInterface
         if (isset($productIndexData[$attribute->getAttributeCode()])) {
             $productIndexData['indexed_attributes'][] = $attribute->getAttributeCode();
         }
+    }
+
+    protected function shouldIndexEntity($entity_id) 
+    {
+        return true;
     }
 }

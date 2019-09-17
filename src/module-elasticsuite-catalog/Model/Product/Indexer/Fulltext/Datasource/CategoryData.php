@@ -80,7 +80,7 @@ class CategoryData implements DatasourceInterface
         return $indexData;
     }
 
-    protected function shouldIndexEntity($entity_id) 
+    public function shouldIndexEntity($entity_id) 
     {
         return true;
     }

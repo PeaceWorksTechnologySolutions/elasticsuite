@@ -241,7 +241,7 @@ class AttributeData extends AbstractAttributeData implements DatasourceInterface
         }
     }
 
-    protected function shouldIndexEntity($entity_id) 
+    public function shouldIndexEntity($entity_id) 
     {
         return true;
     }

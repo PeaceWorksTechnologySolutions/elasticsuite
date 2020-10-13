@@ -40,7 +40,6 @@
                 <field name="sku" type="text">
                     <isSearchable>1</isSearchable>
                     <isUsedForSortBy>1</isUsedForSortBy>
-                    <isUsedInSpellcheck>1</isUsedInSpellcheck>
                     <defaultSearchAnalyzer>reference</defaultSearchAnalyzer>
                 </field>
                 <field name="visibility" type="integer" />

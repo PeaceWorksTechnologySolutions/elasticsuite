@@ -81,6 +81,11 @@ class Spellchecker implements SpellcheckerInterface
     {
         $spellingType = self::SPELLING_TYPE_FUZZY;
 
+        // if we detect SKU or UPC; force exact matching mode.
+        if (preg_match('/[A-Z0-9-]+[0-9-]+/', $request->getQueryText())) {
+            return self::SPELLING_TYPE_EXACT;
+        }
+
         try {
             $cutoffFrequencyLimit = $this->getCutoffrequencyLimit($request);
             $termVectors          = $this->getTermVectors($request);

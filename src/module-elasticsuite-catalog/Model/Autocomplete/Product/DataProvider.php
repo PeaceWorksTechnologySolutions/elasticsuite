@@ -81,6 +81,15 @@ class DataProvider implements DataProviderInterface
         return $this->type;
     }
 
+    /*
+     * PW: Allow subclasses to filter autocomplete products for display.
+     */
+    public function filterItemsForCustomer($items)
+    {
+        // no-op
+        return iterator_to_array($items, false);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -89,7 +98,7 @@ class DataProvider implements DataProviderInterface
         $result = [];
 
         if ($this->configurationHelper->isEnabled($this->getType())) {
-            foreach ($this->productCollection as $product) {
+            foreach ($this->filterItemsForCustomer($this->productCollection) as $product) {
                 $result[] = $this->itemFactory->create(['product' => $product, 'type' => $this->getType()]);
             }
         }

@@ -66,6 +66,9 @@ class CategoryData implements DatasourceInterface
 
         foreach ($categoryData as $categoryDataRow) {
             $productId = (int) $categoryDataRow['product_id'];
+            if (!$this->shouldIndexEntity($productId)) {
+                continue;
+            }
             unset($categoryDataRow['product_id']);
 
             $categoryDataRow = array_merge(
@@ -115,5 +118,13 @@ class CategoryData implements DatasourceInterface
         }
 
         return $this->categoriesUid[$categoryId];
+    }
+
+    /*
+     * Allow subclasses to determine whether category gets indexed.
+     */
+    public function shouldIndexEntity($entity_id) 
+    {
+        return true;
     }
 }

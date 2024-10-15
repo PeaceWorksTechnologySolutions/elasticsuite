@@ -66,12 +66,16 @@ class ItemFactory extends \Magento\Search\Model\Autocomplete\ItemFactory
         ObjectManagerInterface $objectManager,
         UrlInterface $urlBuilder,
         ScopeConfigInterface $scopeConfig,
-        CategoryResource $categoryResource
+        CategoryResource $categoryResource,
+        \Magento\Catalog\Model\CategoryRepository $catRepo,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($objectManager);
         $this->urlBuilder = $urlBuilder;
         $this->categoryUrlSuffix = $scopeConfig->getValue(self::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORES);
         $this->categoryResource = $categoryResource;
+        $this->storeManager = $storeManager;
+        $this->catRepo = $catRepo;
     }
 
     /**
@@ -124,6 +128,12 @@ class ItemFactory extends \Magento\Search\Model\Autocomplete\ItemFactory
      */
     private function getCategoryUrl($category)
     {
+        // PW: Fix for category URLs in autocomplete suggestions.
+        // Customers using the atlantic store view were receiving incorrect URLs that resulted in 404s.
+        $category = $this->catRepo->get($category->getId(), $this->storeManager->getStore()->getId());
+        return $category->getUrl();
+
+
         $documentSource = $category->getDocumentSource();
 
         if ($documentSource && isset($documentSource['url_path'])) {

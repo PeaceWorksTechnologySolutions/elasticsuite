@@ -87,6 +87,14 @@ class Spellchecker implements SpellcheckerInterface
     {
         $spellingType = self::SPELLING_TYPE_FUZZY;
 
+        // PW: if we detect SKU or UPC; force exact matching mode.
+        // Detect sku or UPC in search query using regex (detects 99% of item nos - the ones it does not have no numbers),
+        // and force elasticsuite to use SPELLING_TYPE_EXACT mode for these searches (disables fuzziness/spellchecking).
+        // See #3948.
+        if (preg_match('/[A-Z0-9-]+[0-9-]+/', $request->getQueryText())) {
+            return self::SPELLING_TYPE_EXACT;
+        }
+
         try {
             $cutoffFrequencyLimit = $this->getCutoffrequencyLimit($request);
             $termVectors          = $this->getTermVectors($request);

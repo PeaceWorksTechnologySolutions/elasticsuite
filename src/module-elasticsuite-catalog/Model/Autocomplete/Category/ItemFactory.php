@@ -54,6 +54,9 @@ class ItemFactory extends \Magento\Search\Model\Autocomplete\ItemFactory
      */
     private $categoryResource = null;
 
+    private $storeManager;
+    private $catRepo;
+
     /**
      * ItemFactory constructor.
      *

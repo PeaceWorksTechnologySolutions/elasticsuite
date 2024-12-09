@@ -532,7 +532,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $docIds[] = 0;
         }
 
-        $this->getSelect()->reset(\Magento\Framework\DB\Select::WHERE);
+        // PW: we don't want the where clause to be reset, because we have
+        // set product restrictions in the where clause.  Comment it out.
+        //$this->getSelect()->reset(\Magento\Framework\DB\Select::WHERE);
         $this->getSelect()->where('e.entity_id IN (?)', ['in' => $docIds]);
         $orderList = join(',', $docIds);
         $this->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
